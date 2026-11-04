@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="tg">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#123b2a">
+  <title>Arzonshop — Дӯкони онлайн</title>
+  <style>
+    :root{--green:#123b2a;--lime:#c8f169;--cream:#f7f7f1;--ink:#17231c;--muted:#68736c;--line:#e5e9e2}
+    *{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--cream);color:var(--ink)}
+    header{background:var(--green);color:white;padding:18px 16px 24px}
+    .top,.wrap{max-width:1050px;margin:auto}.top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .brand{font-size:25px;font-weight:850;letter-spacing:-.7px}.brand span{color:var(--lime)}
+    .cart{border:0;border-radius:999px;background:var(--lime);color:var(--green);font-weight:800;padding:11px 16px;font-size:15px}
+    .hero{max-width:1050px;margin:28px auto 0;padding:0 2px}.eyebrow{color:var(--lime);font-size:12px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase}
+    h1{font-size:clamp(32px,7vw,56px);line-height:1.04;max-width:650px;margin:10px 0}.hero p{color:#d9e5dc;max-width:550px;line-height:1.6;margin:12px 0 0}
+    main{max-width:1050px;margin:auto;padding:26px 16px 60px}
+    .intro{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:18px}.intro h2{font-size:25px;margin:0}.intro p{margin:4px 0 0;color:var(--muted);font-size:14px}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+    .card{background:white;border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 5px 18px #18332208}
+    .photo{height:145px;background:linear-gradient(135deg,#e6eedf,#f8f2df);display:grid;place-items:center;font-size:55px}
+    .details{padding:13px}.name{font-weight:750;font-size:16px}.desc{color:var(--muted);font-size:12px;min-height:34px;margin-top:4px;line-height:1.4}
+    .buyrow{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:12px}.price{font-weight:850;color:var(--green)}
+    .add{background:var(--green);color:white;border:0;border-radius:10px;padding:9px 11px;font-weight:750}
+    .note{background:#edf4e8;border:1px solid #dce8d5;padding:13px;border-radius:12px;color:#435348;font-size:13px;line-height:1.5;margin:20px 0}
+    .checkout{background:white;border:1px solid var(--line);border-radius:18px;padding:18px;margin-top:22px}
+    .checkout h2{margin:0 0 10px;font-size:22px}.empty{color:var(--muted);font-size:14px}
+    .cartline{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}
+    .total{display:flex;justify-content:space-between;font-weight:850;margin:14px 0}
+    .field{width:100%;padding:12px;border:1px solid #d9e0d8;border-radius:10px;font:inherit;margin:6px 0 10px}
+    .order{width:100%;background:#1f9d55;color:white;border:0;border-radius:12px;padding:14px;font-size:16px;font-weight:850}
+    footer{text-align:center;color:var(--muted);padding:22px;font-size:12px}
+    @media(min-width:650px){header{padding:22px 24px 35px}main{padding:34px 24px 70px}.grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}.photo{height:190px}.details{padding:16px}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="top">
+    <div class="brand">Arzon<span>shop</span></div>
+    <button class="cart" onclick="document.getElementById('checkout').scrollIntoView({behavior:'smooth'})">Сабад 🛒 <b id="count">0</b></button>
+  </div>
+  <section class="hero">
+    <div class="eyebrow">Хуш омадед ба Arzonshop</div>
+    <h1>Хариди осон,<br>нархи дастрас.</h1>
+    <p>Маҳсулоти дӯстдоштаатонро интихоб кунед ва фармоишро тавассути WhatsApp фиристед.</p>
+  </section>
+</header>
+<main>
+  <div class="intro"><div><h2>Маҳсулот</h2><p>Маҳсулотро интихоб карда, ба сабад илова кунед.</p></div></div>
+  <section class="grid" id="products"></section>
+  <div class="note"><b>Эзоҳ:</b> Ин намунаи аввал аст. Ном, акс ва нархи маҳсулотҳо ҳоло намунавӣ мебошанд. Пеш аз нашр онҳоро бо молҳои воқеии худ иваз мекунем.</div>
+  <section class="checkout" id="checkout">
+    <h2>Сабади харид</h2>
+    <div id="cart"><p class="empty">Ҳоло сабад холӣ аст.</p></div>
+    <div class="total"><span>Ҳамагӣ</span><span id="total">0 сомонӣ</span></div>
+    <label for="customer">Ному насаб</label>
+    <input class="field" id="customer" placeholder="Номи шумо">
+    <label for="phone">Рақами телефон</label>
+    <input class="field" id="phone" inputmode="tel" placeholder="+992 ...">
+    <button class="order" onclick="sendOrder()">Фармоиш тавассути WhatsApp</button>
+  </section>
+</main>
+<footer>© <span id="year"></span> Arzonshop · Дӯкони онлайн</footer>
+<script>
+  // МАЪЛУМОТИ МАГОЗАРО ДАР ИН ҶО ИВАЗ КУНЕД:
+  // Барои WhatsApp рақами худро дар WHATSAPP_NUMBER гузоред (бе + ва фосила).
+  const WHATSAPP_NUMBER = "992XXXXXXXXX";
+  const products = [
+    {id:1,name:"Маҳсулоти намунавӣ 1",desc:"Номи мол ва тавсифи кӯтоҳро ин ҷо нависед.",price:50,emoji:"🎧"},
+    {id:2,name:"Маҳсулоти намунавӣ 2",desc:"Номи мол ва тавсифи кӯтоҳро ин ҷо нависед.",price:80,emoji:"⌚"},
+    {id:3,name:"Маҳсулоти намунавӣ 3",desc:"Номи мол ва тавсифи кӯтоҳро ин ҷо нависед.",price:120,emoji:"🎒"}
+  ];
+  const cart = {};
+  const money = n => new Intl.NumberFormat("tg-TJ").format(n) + " сомонӣ";
+  function renderProducts(){
+    document.getElementById("products").innerHTML = products.map(p=>`
+      <article class="card"><div class="photo">${p.emoji}</div><div class="details">
+      <div class="name">${p.name}</div><div class="desc">${p.desc}</div>
+      <div class="buyrow"><span class="price">${money(p.price)}</span><button class="add" onclick="add(${p.id})">+ Илова</button></div>
+      </div></article>`).join("");
+  }
+  function add(id){cart[id]=(cart[id]||0)+1;renderCart()}
+  function renderCart(){
+    const items=products.filter(p=>cart[p.id]);
+    document.getElementById("count").textContent=items.reduce((s,p)=>s+cart[p.id],0);
+    document.getElementById("cart").innerHTML=items.length?items.map(p=>`<div class="cartline"><span>${p.name} × ${cart[p.id]}</span><b>${money(p.price*cart[p.id])}</b></div>`).join(""):'<p class="empty">Ҳоло сабад холӣ аст.</p>';
+    document.getElementById("total").textContent=money(items.reduce((s,p)=>s+p.price*cart[p.id],0));
+  }
+  function sendOrder(){
+    const items=products.filter(p=>cart[p.id]);
+    if(!items.length){alert("Аввал маҳсулотро ба сабад илова кунед.");return}
+    if(!document.getElementById("customer").value.trim()){alert("Лутфан номатонро нависед.");return}
+    if(WHATSAPP_NUMBER.includes("X")){alert("Барои фаъол кардани фармоиш рақами WhatsApp-ро дар код ворид кардан лозим аст.");return}
+    const lines=items.map(p=>`${p.name} × ${cart[p.id]} — ${money(p.price*cart[p.id])}`);
+    const total=items.reduce((s,p)=>s+p.price*cart[p.id],0);
+    const msg=`Салом! Ман аз Arzonshop фармоиш медиҳам.\nНом: ${document.getElementById("customer").value}\nТелефон: ${document.getElementById("phone").value}\n\n${lines.join("\n")}\n\nҲамагӣ: ${money(total)}`;
+    window.open("https://wa.me/"+WHATSAPP_NUMBER+"?text="+encodeURIComponent(msg),"_blank");
+  }
+  document.getElementById("year").textContent=new Date().getFullYear();
+  renderProducts();renderCart();
+</script>
+</body>
+</html>
